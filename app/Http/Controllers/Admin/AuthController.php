@@ -27,7 +27,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             return redirect()
-                ->route('articles.index')
+                ->intended('/')
                 ->with([
                     'message' => 'ログインしました',
                 ]);
