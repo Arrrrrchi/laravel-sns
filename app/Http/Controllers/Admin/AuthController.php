@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function showLoginForm ()
     {
-        return view('admin.login');
+        return view('admin.users.login');
     }
 
     public function login (Request $request)
@@ -26,7 +26,11 @@ class AuthController extends Controller
             // セッションを再生成する処理（セキュリティ対策)
             $request->session()->regenerate();
 
-            return redirect()->intended('articles.index');
+            return redirect()
+                ->route('articles.index')
+                ->with([
+                    'message' => 'ログインしました',
+                ]);
         }
 
         return back()->withErrors([
@@ -42,6 +46,10 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('admin.login');
+        return redirect()
+            ->route('articles.index')
+            ->with([
+                'message' => 'ログアウトしました',
+            ]);
     }
 }
