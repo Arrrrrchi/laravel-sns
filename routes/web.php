@@ -22,7 +22,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/', [ArticleController::class, 'index']);
+Route::get('/', [ArticleController::class, 'index'])->name('articles.index');
 
 /* ユーザー管理 */
 Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
