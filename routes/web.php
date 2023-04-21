@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\PasswordController;
 
 
 /*
@@ -36,3 +37,15 @@ Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users
 Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AuthController::class, 'login']);
 Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+/* パスワードリセット */
+Route::prefix('password_reset')->name('password_reset.')->group(function () {
+    Route::prefix('email')->name('email.')->group(function () {
+        Route::get('/', [PasswordController::class, 'emailFormResetPassword'])->name('form'); // パスワードリセットメール送信フォームページ
+        Route::post('/', [PasswordController::class, 'sendEmailResetPassword'])->name('send'); // メール送信処理
+        Route::get('/send_complete', [PasswordController::class, 'sendComplete'])->name('send_completed'); // メール送信完了ページ
+    });
+    Route::get('/edit', [PasswordController::class, 'edit'])->name('edit'); // パスワード再設定ページ
+    Route::post('/update', [PasswordController::class, 'update'])->name('update'); // パスワード更新処理
+    Route::get('/edited', [PasswordController::class, 'edited'])->name('edited'); // パスワード更新終了ページ
+});
