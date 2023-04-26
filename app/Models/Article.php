@@ -23,15 +23,23 @@ class Article extends Model
         return $this->belongsTo(User::class);
     }
 
+    /* 中間テーブルlikesの作成 */
     public function likes(): BelongsToMany
     {
-        return $this->belongsToMany('App\User', 'likes')->withTimestamps();
+        return $this->belongsToMany(User::class, 'likes')->withTimestamps();
     }
 
+    /* いいねされたかの判定 */
     public function isLikeBy(?User $user): bool
     {
         return $user
             ? (bool)$this->likes->where('id',$user->id)->count()
             : false;
+    }
+
+    /* いいね数のカウントするアクセサ */
+    public function getCountLikesAttribute(): int
+    {
+        return $this->likes->count();
     }
 }
