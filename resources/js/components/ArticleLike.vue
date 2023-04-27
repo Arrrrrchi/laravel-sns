@@ -39,10 +39,10 @@
         },
         methods: {
             clickLike() {
-                // if (!this.authorized) {
-                // alert('いいね機能はログイン中のみ使用できます')
-                // return
-                // }
+                if (!this.authorized) {
+                    alert('いいね機能はログイン中のみ使用できます')
+                    return
+                }
 
                 this.isLikedBy
                 ? this.unlike()
