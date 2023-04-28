@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use App\Models\Tags;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -47,7 +47,7 @@ class Article extends Model
     /* 中間テーブルarticle_tagの作成 */
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tags::class)->withTimestamps();
+        return $this->belongsToMany(Tag::class)->withTimestamps();
     }
     
 }

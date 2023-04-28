@@ -24,6 +24,7 @@ class ArticleRequest extends FormRequest
         return [
             'title' => 'required|max:50',
             'body' => 'required|max:500',
+            'tags' => 'json|regex:/^(?!.*\s).+$/u|regex:/^(?!.*\/).*$/u',
         ];
     }
 
@@ -32,6 +33,22 @@ class ArticleRequest extends FormRequest
         return[
             'title' => 'タイトル',
             'body' => '本文',
+            'tags' => 'タグ',
         ];
+    }
+
+    /**
+     * バリデーション成功後に自動的に呼ばれるメソッド
+     *
+     * json形式で受け取ったtagをコレクションに変換し、タグ数を5個以下に制限
+     */
+    public function passedValidation()
+    {
+        $maxTags = 5; 
+        $tags = collect(json_decode($this->tags))
+            ->unique()
+            ->take($maxTags)
+            ->values();
+        $this->merge(['tags' => $tags]);
     }
 }

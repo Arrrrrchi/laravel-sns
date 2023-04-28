@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\TagController;
+
 
 
 /*
@@ -32,6 +34,8 @@ Route::prefix('articles')->name('articles.')->group(function(){
     Route::delete('/{article}/like', [ArticleController::class, 'unlike'])->name('unlike')->middleware('auth');
 });
 
+/* タグ別記事一覧 */
+Route::get('/tags/{name}', [TagController::class, 'show'])->name('tags.show');
 
 /* ユーザー管理 */
 Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
