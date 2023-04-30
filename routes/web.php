@@ -6,6 +6,8 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\UserPageController;
+
 
 
 
@@ -56,4 +58,14 @@ Route::prefix('password_reset')->name('password_reset.')->group(function () {
     Route::get('/edit', [PasswordController::class, 'edit'])->name('edit'); // パスワード再設定ページ
     Route::post('/update', [PasswordController::class, 'update'])->name('update'); // パスワード更新処理
     Route::get('/edited', [PasswordController::class, 'edited'])->name('edited'); // パスワード更新終了ページ
+});
+
+/* ユーザー情報 */
+Route::prefix('user')->name('user.')->group(function () {
+    Route::get('/{name}', [UserPageController::class, 'show'])->name('show');
+    /* フォロー機能 */
+    Route::middleware('auth')->group(function () {
+        Route::put('/{name}/follow', [UserPageController::class, 'follow'])->name('follow');
+        Route::delete('/{name}/follow', [UserPageController::class, 'unfollow'])->name(('unfollow'));
+    });
 });
