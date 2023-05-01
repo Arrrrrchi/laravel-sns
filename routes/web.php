@@ -48,6 +48,12 @@ Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admi
 Route::post('/admin/login', [AuthController::class, 'login']);
 Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
 
+/* Googleログイン */
+Route::prefix('login')->name('login.')->group(function () {
+    Route::get('/{provider}', [AuthController::class, 'redirectToProvider'])->name('{provider}');
+    Route::get('/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('{provider}.callback');
+});
+
 /* パスワードリセット */
 Route::prefix('password_reset')->name('password_reset.')->group(function () {
     Route::prefix('email')->name('email.')->group(function () {

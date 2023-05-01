@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Admin\StoreUserRequest;
+use Illuminate\Support\Facades\Auth;
 
 
 class UserController extends Controller
@@ -35,9 +36,13 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $validated['password'] = Hash::make($validated['password']);
-        User::create($validated);
+        $user = User::create($validated);
 
-        return redirect(RouteServiceProvider::HOME);
+        Auth::login($user);
+        return redirect(RouteServiceProvider::HOME)
+            ->with([
+                'message' => '新しく' . $user->name . 'が登録されました',
+            ]);
     }
 
     /**

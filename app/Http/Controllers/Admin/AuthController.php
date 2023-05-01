@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
 
 class AuthController extends Controller
 {
@@ -52,4 +55,32 @@ class AuthController extends Controller
                 'message' => 'ログアウトしました',
             ]);
     }
+
+    public function redirectToProvider(string $provider)
+    {
+        return Socialite::driver($provider)->redirect();
+    }
+
+    public function handleProviderCallback(Request $request, string $provider)
+    {
+        // Googleから取得したユーザー情報
+        $providerUser = Socialite::driver($provider)->stateless()->user();
+
+        // Googleのメールアドレスをもとにユーザーモデルを取得
+        $user = User::where('email', $providerUser->getEmail())->first();
+
+        // $userがnullでなければログイン
+        if ($user) {
+            Auth::guard()->login($user, true); // login()の第二引数をtrueにすると、ログアウトしない限りログイン状態を維持する
+            return $this->sendLoginResponse($request);
+        }  
+    }
+
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+
+        return redirect()->intended(RouteServiceProvider::HOME);
+    }
+
 }
