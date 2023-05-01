@@ -64,6 +64,8 @@ Route::prefix('password_reset')->name('password_reset.')->group(function () {
 Route::prefix('user')->name('user.')->group(function () {
     Route::get('/{name}', [UserPageController::class, 'show'])->name('show');
     Route::get('/{name}/likes', [UserPageController::class, 'likes'])->name('likes');
+    Route::get('/{name}/followings', [UserPageController::class, 'followings'])->name('followings');
+    Route::get('/{name}/followers', [UserPageController::class, 'followers'])->name('followers');
 
     /* フォロー機能 */
     Route::middleware('auth')->group(function () {
