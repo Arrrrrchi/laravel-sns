@@ -74,6 +74,12 @@ class AuthController extends Controller
             Auth::guard()->login($user, true); // login()の第二引数をtrueにすると、ログアウトしない限りログイン状態を維持する
             return $this->sendLoginResponse($request);
         }  
+
+        return redirect()->route('register.{provider}', [
+            'provider' => $provider,
+            'email' => $providerUser->getEmail(),
+            'token' => $providerUser->token,
+        ]);
     }
 
     protected function sendLoginResponse(Request $request)

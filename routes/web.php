@@ -54,6 +54,13 @@ Route::prefix('login')->name('login.')->group(function () {
     Route::get('/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('{provider}.callback');
 });
 
+/* Googleアカウントを使った登録 */
+Route::prefix('register')->name('register.')->group(function () {
+    Route::get('/{provider}', [UserController::class, 'showProviderUserRegistrationForm'])->name('{provider}');
+    Route::post('/{provider}', [UserController::class, 'registerProviderUser'])->name('{provider}');
+});
+
+
 /* パスワードリセット */
 Route::prefix('password_reset')->name('password_reset.')->group(function () {
     Route::prefix('email')->name('email.')->group(function () {
